@@ -25,9 +25,9 @@ export class AppHome extends LitElement {
         }
 
         h1 {
-          font-size: 1.25rem;
+          font-size: 1.75rem;
           font-weight: 500;
-          text-align: center;
+          margin-top: 3rem;
         }
 
         main {
@@ -67,6 +67,12 @@ export class AppHome extends LitElement {
           }
           main {
             padding: 32px;
+          }
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .container {
+            background-color: #333;
           }
         }
       `,
