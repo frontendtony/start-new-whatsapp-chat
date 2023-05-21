@@ -77,13 +77,14 @@ export class AppHome extends LitElement {
     super();
   }
 
-  share() {
-    if ((navigator as any).share) {
-      (navigator as any).share({
-        title: 'PWABuilder pwa-starter',
-        text: 'Check out the PWABuilder pwa-starter!',
-        url: 'https://github.com/pwa-builder/pwa-starter',
-      });
+  connectedCallback() {
+    super.connectedCallback();
+
+    const url = new URL(window.location.href);
+    const phoneNumber = url.searchParams.get('phoneNumber');
+
+    if (phoneNumber) {
+      window.open(`https://wa.me/${phoneNumber}`);
     }
   }
 
@@ -92,7 +93,7 @@ export class AppHome extends LitElement {
       'sl-input[name="phone"]'
     ) as HTMLInputElement;
 
-    window.open(`https://wa.me/${phone.value}`, '_blank');
+    window.open(`https://wa.me/${phone.value}`);
   };
 
   render() {

@@ -41,6 +41,15 @@
       "type": "image/png"
     }
   ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "phoneNumber",
+      "url": "url"
+    }
+  },
   "categories": ["social"]
 }
 
