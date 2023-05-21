@@ -1,69 +1,57 @@
 import { LitElement, css, html } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
-import '@shoelace-style/shoelace/dist/components/card/card.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+import '@shoelace-style/shoelace/dist/components/input/input.js';
 
 import { styles } from '../styles/shared-styles';
 
 @customElement('app-home')
 export class AppHome extends LitElement {
-
-  // For more information on using properties and state in lit
-  // check out this link https://lit.dev/docs/components/properties/
-  @property() message = 'Welcome!';
-
   static get styles() {
     return [
       styles,
       css`
-      #welcomeBar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-
-      #welcomeCard,
-      #infoCard {
-        padding: 18px;
-        padding-top: 0px;
-      }
-
-      sl-card::part(footer) {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      @media(min-width: 750px) {
-        sl-card {
-          width: 70vw;
-        }
-      }
-
-
-      @media (horizontal-viewport-segments: 2) {
-        #welcomeBar {
-          flex-direction: row;
-          align-items: flex-start;
-          justify-content: space-between;
+        .container {
+          display: grid;
+          min-height: 50vh;
+          grid-template-rows: auto 1fr;
+          padding: 16px;
         }
 
-        #welcomeCard {
-          margin-right: 64px;
+        h1 {
+          font-size: 1.5rem;
+          font-weight: 500;
         }
-      }
-    `];
+
+        main {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        sl-card::part(footer) {
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        sl-button {
+          margin-top: 32px;
+          display: flex;
+          column-gap: 8px;
+        }
+
+        .whatsapp-icon {
+          margin-bottom: -2px;
+          margin-left: 4px;
+        }
+      `,
+    ];
   }
 
   constructor() {
     super();
-  }
-
-  async firstUpdated() {
-    // this method is a lifecycle even in lit
-    // for more info check out the lit docs https://lit.dev/docs/components/lifecycle/
-    console.log('This is your home page');
   }
 
   share() {
@@ -76,63 +64,55 @@ export class AppHome extends LitElement {
     }
   }
 
+  onChat = () => {
+    const phone = this.shadowRoot?.querySelector(
+      'sl-input[name="phone"]'
+    ) as HTMLInputElement;
+
+    window.open(`https://wa.me/${phone.value}`, '_blank');
+  };
+
   render() {
     return html`
-      <app-header></app-header>
+      <div class="container">
+        <h1>Start a WhatsApp Chat with any Phone Number</h1>
 
-      <main>
-        <div id="welcomeBar">
-          <sl-card id="welcomeCard">
-            <div slot="header">
-              <h2>${this.message}</h2>
-            </div>
+        <main>
+          <div id="welcomeBar">
+            <sl-input
+              inputmode="tel"
+              label="Enter phone number"
+              size="large"
+              placeholder="2348012345678"
+              name="phone"
+              help-text="Include country code"
+              clearable
+            ></sl-input>
 
-            <p>
-              For more information on the PWABuilder pwa-starter, check out the
-              <a href="https://docs.pwabuilder.com/#/starter/quick-start">
-                documentation</a>.
-            </p>
-
-            <p id="mainInfo">
-              Welcome to the
-              <a href="https://pwabuilder.com">PWABuilder</a>
-              pwa-starter! Be sure to head back to
-              <a href="https://pwabuilder.com">PWABuilder</a>
-              when you are ready to ship this PWA to the Microsoft Store, Google Play
-              and the Apple App Store!
-            </p>
-
-            ${'share' in navigator
-              ? html`<sl-button slot="footer" variant="primary" @click="${this.share}">Share this Starter!</sl-button>`
-              : null}
-          </sl-card>
-
-          <sl-card id="infoCard">
-            <h2>Technology Used</h2>
-
-            <ul>
-              <li>
-                <a href="https://www.typescriptlang.org/">TypeScript</a>
-              </li>
-
-              <li>
-                <a href="https://lit.dev">lit</a>
-              </li>
-
-              <li>
-                <a href="https://shoelace.style/">Shoelace</a>
-              </li>
-
-              <li>
-                <a href="https://github.com/thepassle/app-tools/blob/master/router/README.md"
-                  >App Tools Router</a>
-              </li>
-            </ul>
-          </sl-card>
-
-          <sl-button href="${(import.meta as any).env.BASE_URL}about" variant="primary">Navigate to About</sl-button>
-        </div>
-      </main>
+            <sl-button
+              @click="${this.onChat}"
+              variant="success"
+              class="button"
+              size="large"
+            >
+              <span>Start WhatsApp Chat</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="whatsapp-icon"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"
+                />
+              </svg>
+            </sl-button>
+          </div>
+        </main>
+      </div>
     `;
   }
 }
+
