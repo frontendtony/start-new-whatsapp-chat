@@ -84,7 +84,7 @@ export class AppHome extends LitElement {
     const phoneNumber = url.searchParams.get('phoneNumber');
 
     if (phoneNumber) {
-      window.open(`https://wa.me/${phoneNumber}`);
+      window.open(`https://wa.me/${phoneNumber}`, '_blank');
     }
   }
 
@@ -93,7 +93,7 @@ export class AppHome extends LitElement {
       'sl-input[name="phone"]'
     ) as HTMLInputElement;
 
-    window.open(`https://wa.me/${phone.value}`);
+    window.open(`https://wa.me/${phone.value}`, '_blank');
   };
 
   render() {
