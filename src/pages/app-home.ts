@@ -88,9 +88,11 @@ export class AppHome extends LitElement {
 
     const url = new URL(window.location.href);
     const phoneNumber = url.searchParams.get('phoneNumber');
+    // remove white spaces from phone number
+    const trimmedPhoneNumber = phoneNumber?.replace(/\s/g, '');
 
     if (phoneNumber) {
-      window.open(`https://wa.me/${phoneNumber}`, '_blank');
+      window.open(`https://wa.me/${trimmedPhoneNumber}`, '_blank');
     }
   }
 
