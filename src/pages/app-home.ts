@@ -1,5 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import countries from '../utils/countries';
+import timezones from '../utils/timezones';
 
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
@@ -88,11 +90,31 @@ export class AppHome extends LitElement {
 
     const url = new URL(window.location.href);
     const phoneNumber = url.searchParams.get('phoneNumber');
-    // remove white spaces from phone number
-    const trimmedPhoneNumber = phoneNumber?.replace(/\s/g, '');
 
     if (phoneNumber) {
-      window.open(`https://wa.me/${trimmedPhoneNumber}`, '_blank');
+      // remove white spaces and leading zero from phone number
+      const trimmedPhoneNumber = phoneNumber
+        ?.replace(/\s/g, '')
+        .replace(/^0+/, '');
+
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      // if phone number is more than 9 digits or we couldn't get their timezone,
+      // open whatsapp with phone number as-is
+      if (trimmedPhoneNumber.length > 9 || timezone === '' || !timezone) {
+        window.open(`https://wa.me/${trimmedPhoneNumber}`, '_blank');
+      } else {
+        const countryCode = (timezones as any)[timezone]?.c[0];
+        const countryData = countries.find(
+          (c) => c.countryCode === countryCode
+        );
+        const countryCallingCode = countryData?.countryCallingCode;
+
+        window.open(
+          `https://wa.me/${countryCallingCode}${trimmedPhoneNumber}`,
+          '_blank'
+        );
+      }
     }
   }
 
